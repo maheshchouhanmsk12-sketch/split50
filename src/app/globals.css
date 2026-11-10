@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Warm Ivory light theme */
+  --bg-primary: #F6F5F1;
+  --bg-surface: #FFFFFF;
+  --bg-surface-elevated: #FDFDFD;
+  --bg-subtle: #EFECE6;
+  --border-subtle: rgba(23, 21, 43, 0.08);
+  --border-strong: rgba(23, 21, 43, 0.16);
+
+  --text-primary: #17152B;
+  --text-secondary: #585375;
+  --text-muted: #847F9E;
+
+  /* Theme Accents */
+  --midnight-plum: #17152B;
+  --electric-lime: #B8F36B;
+  --electric-lime-text: #17152B;
+  --electric-lime-subtle: rgba(184, 243, 107, 0.25);
+  --soft-coral: #E0583B;
+  --soft-coral-subtle: rgba(224, 88, 59, 0.12);
+  --muted-violet: #746BEA;
+  --muted-violet-subtle: rgba(116, 107, 234, 0.12);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+.dark {
+  /* Midnight Plum dark theme */
+  --bg-primary: #17152B;
+  --bg-surface: #201D38;
+  --bg-surface-elevated: #282447;
+  --bg-subtle: #1D1A33;
+  --border-subtle: rgba(139, 131, 246, 0.16);
+  --border-strong: rgba(139, 131, 246, 0.32);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --text-primary: #F6F5F1;
+  --text-secondary: #B1ACCD;
+  --text-muted: #7E789F;
+
+  /* Theme Accents */
+  --midnight-plum: #17152B;
+  --electric-lime: #B8F36B;
+  --electric-lime-text: #17152B;
+  --electric-lime-subtle: rgba(184, 243, 107, 0.15);
+  --soft-coral: #FF8C72;
+  --soft-coral-subtle: rgba(255, 140, 114, 0.15);
+  --muted-violet: #8B83F6;
+  --muted-violet-subtle: rgba(139, 131, 246, 0.18);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Scrollbar for clean fintech feel */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-violet);
+}
+
+/* Numeric tabular formatting for financial figures */
+.font-tabular {
+  font-variant-numeric: tabular-nums;
 }

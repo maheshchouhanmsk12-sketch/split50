@@ -1,0 +1,17 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Split50 Electric Lime Center Coin -->
+    <path
+        android:fillColor="#B8F36B"
+        android:pathData="M54,26 A28,28 0 1,0 54,82 A28,28 0 1,0 54,26 Z" />
+    <!-- Split50 Glyph in Midnight Plum -->
+    <path
+        android:fillColor="#17152B"
+        android:pathData="M43,43 H62 V49 H49 V56 H60 C64,56 66,59 66,63 C66,67 64,70 60,70 H43 V64 H60 C61,64 62,63 62,62 C62,61 61,60 60,60 H48 C45,60 43,58 43,55 Z" />
+    <path
+        android:fillColor="#17152B"
+        android:pathData="M68,43 A3.5,3.5 0 1,0 68,50 A3.5,3.5 0 1,0 68,43 Z" />
+</vector>
