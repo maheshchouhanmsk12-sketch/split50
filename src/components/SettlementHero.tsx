@@ -15,10 +15,10 @@ export function SettlementHero() {
   return (
     <>
       <div className="relative overflow-hidden rounded-3xl p-6 sm:p-8 border shadow-xl transition-all duration-300 bg-[var(--bg-surface)] border-[var(--border-strong)]">
-        {/* Subtle background glow effect using brand palette */}
+        {/* Subtle background glow effect using emerald / rose */}
         <div
           className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl pointer-events-none opacity-20 ${
-            isSettled ? "bg-[#B8F36B]" : "bg-[#FF8C72]"
+            isSettled ? "bg-emerald-500" : "bg-rose-500"
           }`}
         />
 
@@ -28,13 +28,13 @@ export function SettlementHero() {
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border bg-[var(--bg-subtle)] border-[var(--border-subtle)]">
               {isSettled ? (
                 <>
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#B8F36B]" />
-                  <span className="text-[#B8F36B]">All Settled</span>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                  <span className="text-emerald-500 font-extrabold">All Settled</span>
                 </>
               ) : (
                 <>
-                  <ArrowRightLeft className="w-3.5 h-3.5 text-[#FF8C72]" />
-                  <span className="text-[#FF8C72]">Payment Needed</span>
+                  <ArrowRightLeft className="w-3.5 h-3.5 text-rose-500" />
+                  <span className="text-rose-500 font-extrabold">Payment Needed</span>
                 </>
               )}
             </div>
@@ -61,9 +61,9 @@ export function SettlementHero() {
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-[var(--bg-subtle)] border border-[var(--border-subtle)] text-[var(--text-primary)]"
                     >
                       <span className="text-[var(--text-secondary)]">{t.fromName}</span>
-                      <ArrowRightLeft className="w-3 h-3 text-[#FF8C72]" />
+                      <ArrowRightLeft className="w-3 h-3 text-rose-500" />
                       <span className="text-[var(--text-secondary)]">{t.toName}:</span>
-                      <span className="font-bold text-[#B8F36B] font-tabular">
+                      <span className="font-bold text-emerald-500 font-tabular">
                         {formatPaise(t.amountPaise)}
                       </span>
                     </span>
@@ -85,7 +85,7 @@ export function SettlementHero() {
               className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border text-xs font-bold transition-all duration-150 active:scale-95 bg-[var(--bg-surface-elevated)] border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-[var(--border-strong)] hover:bg-[var(--bg-subtle)] shadow-sm"
               title="Share report on WhatsApp"
             >
-              <MessageSquareShare className="w-4 h-4 text-[#8B83F6]" />
+              <MessageSquareShare className="w-4 h-4 text-emerald-500" />
               <span>Share Report</span>
             </button>
 
@@ -95,7 +95,7 @@ export function SettlementHero() {
                 setEditingExpense(null);
                 setIsAddExpenseOpen(true);
               }}
-              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl font-extrabold text-xs transition-all duration-150 active:scale-95 bg-[#B8F36B] text-[#17152B] hover:brightness-105 shadow-lg shadow-[#B8F36B]/20"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl font-extrabold text-xs transition-all duration-150 active:scale-95 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 shadow-lg shadow-emerald-500/20"
             >
               <Plus className="w-4 h-4 stroke-[3]" />
               <span>+ Add Expense</span>

@@ -70,9 +70,9 @@ export function DataManagement() {
     <>
       <div className="space-y-6">
         {/* Appearance & Theme Settings */}
-        <div className="rounded-3xl p-6 border shadow-sm bg-[var(--bg-surface)] border-[var(--border-subtle)] space-y-4">
+        <div className="rounded-3xl p-6 sm:p-7 border shadow-sm bg-[var(--bg-surface)] border-[var(--border-subtle)] space-y-4">
           <div className="flex items-center gap-2">
-            <Sun className="w-5 h-5 text-[#B8F36B]" />
+            <Sun className="w-5 h-5 text-emerald-500" />
             <h2 className="text-base font-bold tracking-tight text-[var(--text-primary)]">
               Appearance & Theme
             </h2>
@@ -87,11 +87,11 @@ export function DataManagement() {
               onClick={() => setTheme("light")}
               className={`flex flex-col items-center gap-2 p-3.5 rounded-2xl border text-xs font-bold transition-all active:scale-95 ${
                 theme === "light"
-                  ? "bg-[var(--bg-subtle)] border-[#8B83F6] text-[var(--text-primary)] shadow-sm"
+                  ? "bg-[var(--bg-subtle)] border-emerald-500 text-[var(--text-primary)] shadow-sm"
                   : "bg-[var(--bg-surface-elevated)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:border-[var(--border-strong)]"
               }`}
             >
-              <Sun className="w-4 h-4 text-[#8B83F6]" />
+              <Sun className="w-4 h-4 text-emerald-500" />
               <span>Light Mode</span>
             </button>
 
@@ -100,11 +100,11 @@ export function DataManagement() {
               onClick={() => setTheme("dark")}
               className={`flex flex-col items-center gap-2 p-3.5 rounded-2xl border text-xs font-bold transition-all active:scale-95 ${
                 theme === "dark"
-                  ? "bg-[var(--bg-subtle)] border-[#B8F36B] text-[var(--text-primary)] shadow-sm"
+                  ? "bg-[var(--bg-subtle)] border-emerald-500 text-[var(--text-primary)] shadow-sm"
                   : "bg-[var(--bg-surface-elevated)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:border-[var(--border-strong)]"
               }`}
             >
-              <Moon className="w-4 h-4 text-[#B8F36B]" />
+              <Moon className="w-4 h-4 text-emerald-500" />
               <span>Dark Mode</span>
             </button>
 
@@ -113,7 +113,7 @@ export function DataManagement() {
               onClick={() => setTheme("system")}
               className={`flex flex-col items-center gap-2 p-3.5 rounded-2xl border text-xs font-bold transition-all active:scale-95 ${
                 theme === "system"
-                  ? "bg-[var(--bg-subtle)] border-[#8B83F6] text-[var(--text-primary)] shadow-sm"
+                  ? "bg-[var(--bg-subtle)] border-emerald-500 text-[var(--text-primary)] shadow-sm"
                   : "bg-[var(--bg-surface-elevated)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:border-[var(--border-strong)]"
               }`}
             >
@@ -124,18 +124,18 @@ export function DataManagement() {
         </div>
 
         {/* Local Storage Notice & Backup/Restore */}
-        <div className="rounded-3xl p-6 border shadow-sm bg-[var(--bg-surface)] border-[var(--border-subtle)] space-y-5">
+        <div className="rounded-3xl p-6 sm:p-7 border shadow-sm bg-[var(--bg-surface)] border-[var(--border-subtle)] space-y-5">
           <div className="flex items-center gap-2">
-            <Database className="w-5 h-5 text-[#8B83F6]" />
+            <Database className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
             <h2 className="text-base font-bold tracking-tight text-[var(--text-primary)]">
               Backup & Storage
             </h2>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-[var(--bg-subtle)] border border-[var(--border-subtle)] flex items-start gap-3">
-            <Info className="w-4 h-4 text-[#8B83F6] shrink-0 mt-0.5" />
+            <Info className="w-4 h-4 text-indigo-500 dark:text-indigo-400 shrink-0 mt-0.5" />
             <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-              Split50 stores your data strictly in your local browser storage for maximum privacy and zero latency. LocalStorage does not automatically sync across separate browsers or devices. Export regular backups to preserve or transfer your data.
+              Split50 stores your data strictly in your local device storage for maximum privacy and zero latency. LocalStorage does not automatically sync across separate browsers or devices. Export regular backups to preserve or transfer your data.
             </p>
           </div>
 
@@ -145,12 +145,12 @@ export function DataManagement() {
               onClick={handleExport}
               className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border font-bold text-xs transition-all active:scale-95 bg-[var(--bg-surface-elevated)] border-[var(--border-strong)] text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] shadow-sm"
             >
-              <Download className="w-4 h-4 text-[#B8F36B]" />
+              <Download className="w-4 h-4 text-emerald-500" />
               <span>Export Backup (.json)</span>
             </button>
 
             <label className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border font-bold text-xs transition-all active:scale-95 bg-[var(--bg-surface-elevated)] border-[var(--border-strong)] text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] shadow-sm cursor-pointer">
-              <Upload className="w-4 h-4 text-[#8B83F6]" />
+              <Upload className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
               <span>Import Backup</span>
               <input
                 ref={fileInputRef}
@@ -164,10 +164,10 @@ export function DataManagement() {
         </div>
 
         {/* Danger Zone */}
-        <div className="rounded-3xl p-6 border shadow-sm bg-[var(--bg-surface)] border-[#FF8C72]/20 space-y-4">
+        <div className="rounded-3xl p-6 sm:p-7 border shadow-sm bg-[var(--bg-surface)] border-rose-500/20 space-y-4">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 text-[#FF8C72]" />
-            <h2 className="text-base font-bold tracking-tight text-[#FF8C72]">
+            <AlertTriangle className="w-5 h-5 text-rose-500" />
+            <h2 className="text-base font-bold tracking-tight text-rose-500">
               Danger Zone
             </h2>
           </div>
@@ -179,7 +179,7 @@ export function DataManagement() {
             <button
               type="button"
               onClick={() => setConfirmResetExpenses(true)}
-              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-[#FF8C72]/30 text-[#FF8C72] bg-[#FF8C72]/10 hover:bg-[#FF8C72]/20 font-bold text-xs transition-all active:scale-95"
+              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-rose-500/30 text-rose-500 bg-rose-500/10 hover:bg-rose-500/20 font-bold text-xs transition-all active:scale-95"
             >
               <RotateCcw className="w-4 h-4" />
               <span>Reset Expenses Only</span>
@@ -188,7 +188,7 @@ export function DataManagement() {
             <button
               type="button"
               onClick={() => setConfirmResetAll(true)}
-              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-[#FF8C72] text-[#17152B] hover:brightness-105 font-bold text-xs transition-all active:scale-95 shadow-md shadow-[#FF8C72]/15"
+              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-rose-500 text-zinc-950 font-bold text-xs hover:bg-rose-400 transition-all active:scale-95 shadow-md shadow-rose-500/20"
             >
               <Trash2 className="w-4 h-4" />
               <span>Reset Entire App</span>
@@ -215,7 +215,7 @@ export function DataManagement() {
       <ConfirmModal
         isOpen={confirmResetAll}
         title="Reset Entire Application?"
-        message="This will completely reset Split50 to factory settings: clearing all expenses and resetting partners back to Rahul and Amit. Make sure you have exported a backup if needed."
+        message="This will completely reset Split50 to factory settings: clearing all custom expenses and resetting partners back to Mahesh and Abadh. Make sure you have exported a backup if needed."
         confirmLabel="Reset Everything"
         isDestructive={true}
         onConfirm={() => {
@@ -227,4 +227,3 @@ export function DataManagement() {
     </>
   );
 }
-

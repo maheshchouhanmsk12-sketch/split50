@@ -25,7 +25,7 @@ export function RecentExpenses() {
   const { expenses, partners, setActiveTab, setIsAddExpenseOpen, setEditingExpense, deleteExpense } = useSplit();
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
-  const recent = expenses.slice(0, 4);
+  const recent = expenses.slice(0, 5);
 
   const getPartnerName = (id: string) => {
     return partners.find((p) => p.id === id)?.name || "Unknown";
@@ -48,7 +48,7 @@ export function RecentExpenses() {
 
   return (
     <>
-      <div className="rounded-3xl p-6 border shadow-sm bg-[var(--bg-surface)] border-[var(--border-subtle)]">
+      <div className="rounded-3xl p-6 sm:p-7 border shadow-sm bg-[var(--bg-surface)] border-[var(--border-subtle)]">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-base font-bold tracking-tight text-[var(--text-primary)]">
@@ -60,7 +60,7 @@ export function RecentExpenses() {
           {expenses.length > 0 && (
             <button
               onClick={() => setActiveTab("expenses")}
-              className="inline-flex items-center gap-1 text-xs font-bold text-[#8B83F6] hover:text-[#B8F36B] transition-colors"
+              className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline transition-colors"
             >
               <span>View Passbook</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -84,7 +84,7 @@ export function RecentExpenses() {
                 setEditingExpense(null);
                 setIsAddExpenseOpen(true);
               }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-[#B8F36B] text-[#17152B] hover:brightness-105 active:scale-95 transition-all shadow-sm"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-zinc-950 active:scale-95 transition-all shadow-sm"
             >
               <Plus className="w-3.5 h-3.5 stroke-[3]" />
               Add First Expense
@@ -98,7 +98,7 @@ export function RecentExpenses() {
                 className="py-3.5 flex items-center justify-between gap-3 group transition-colors"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-10 h-10 rounded-2xl flex items-center justify-center bg-[var(--bg-subtle)] text-[#8B83F6] shrink-0">
+                  <div className="w-10 h-10 rounded-2xl flex items-center justify-center bg-[var(--bg-subtle)] text-emerald-600 dark:text-emerald-400 shrink-0">
                     {getCategoryIcon(exp.category)}
                   </div>
                   <div className="min-w-0">
@@ -118,7 +118,7 @@ export function RecentExpenses() {
                     {formatPaise(exp.amountPaise)}
                   </span>
 
-                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex items-center gap-1 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
                       onClick={() => setEditingExpense(exp)}
                       className="p-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-subtle)]"
@@ -128,7 +128,7 @@ export function RecentExpenses() {
                     </button>
                     <button
                       onClick={() => setDeleteTargetId(exp.id)}
-                      className="p-1.5 rounded-lg text-[var(--text-muted)] hover:text-[#FF8C72] hover:bg-[var(--bg-subtle)]"
+                      className="p-1.5 rounded-lg text-[var(--text-muted)] hover:text-rose-500 hover:bg-[var(--bg-subtle)]"
                       title="Delete expense"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -157,4 +157,3 @@ export function RecentExpenses() {
     </>
   );
 }
-

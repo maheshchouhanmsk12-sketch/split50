@@ -19,7 +19,7 @@ export function FinancialMetrics() {
           <span className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
             Total Spent
           </span>
-          <div className="p-2 rounded-xl bg-[#8B83F6]/15 text-[#8B83F6]">
+          <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-500 dark:text-indigo-400">
             <Receipt className="w-4 h-4" />
           </div>
         </div>
@@ -37,7 +37,7 @@ export function FinancialMetrics() {
           <span className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
             Equal Share / Person
           </span>
-          <div className="p-2 rounded-xl bg-[#B8F36B]/20 text-[#B8F36B]">
+          <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
             <Users className="w-4 h-4" />
           </div>
         </div>
@@ -55,7 +55,7 @@ export function FinancialMetrics() {
           <span className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
             Paid by Partners
           </span>
-          <div className="p-2 rounded-xl bg-[#8B83F6]/15 text-[#8B83F6]">
+          <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-500 dark:text-indigo-400">
             <Wallet className="w-4 h-4" />
           </div>
         </div>
@@ -63,7 +63,7 @@ export function FinancialMetrics() {
           {summary.partnerMetrics.map((p) => (
             <div key={p.partnerId} className="flex items-center justify-between text-xs font-semibold">
               <span className="text-[var(--text-secondary)] truncate flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#8B83F6]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 {p.partnerName}
               </span>
               <span className="text-[var(--text-primary)] font-tabular font-bold">
@@ -80,7 +80,7 @@ export function FinancialMetrics() {
           <span className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
             Net Balances
           </span>
-          <div className="p-2 rounded-xl bg-[#B8F36B]/20 text-[#B8F36B]">
+          <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
             <Scale className="w-4 h-4" />
           </div>
         </div>
@@ -96,9 +96,9 @@ export function FinancialMetrics() {
                 <span
                   className={`font-tabular font-bold flex items-center gap-0.5 ${
                     isReceiving
-                      ? "text-[#B8F36B]"
+                      ? "text-emerald-500"
                       : isOwing
-                      ? "text-[#FF8C72]"
+                      ? "text-rose-500"
                       : "text-[var(--text-muted)]"
                   }`}
                 >
@@ -114,4 +114,3 @@ export function FinancialMetrics() {
     </div>
   );
 }
-

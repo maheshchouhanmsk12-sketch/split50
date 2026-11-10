@@ -1,51 +1,55 @@
 @import "tailwindcss";
 
 :root {
-  /* Warm Ivory light theme */
-  --bg-primary: #F6F5F1;
+  /* Apple Pay / Linear / CRED Fintech Light Theme */
+  --bg-primary: #FAFAFA;
   --bg-surface: #FFFFFF;
-  --bg-surface-elevated: #FDFDFD;
-  --bg-subtle: #EFECE6;
-  --border-subtle: rgba(23, 21, 43, 0.08);
-  --border-strong: rgba(23, 21, 43, 0.16);
+  --bg-surface-elevated: #F4F4F5;
+  --bg-subtle: #F0F0F2;
+  --border-subtle: rgba(24, 24, 27, 0.08);
+  --border-strong: rgba(24, 24, 27, 0.16);
 
-  --text-primary: #17152B;
-  --text-secondary: #585375;
-  --text-muted: #847F9E;
+  --text-primary: #09090B;
+  --text-secondary: #52525B;
+  --text-muted: #71717A;
 
-  /* Theme Accents */
-  --midnight-plum: #17152B;
-  --electric-lime: #B8F36B;
-  --electric-lime-text: #17152B;
-  --electric-lime-subtle: rgba(184, 243, 107, 0.25);
-  --soft-coral: #E0583B;
-  --soft-coral-subtle: rgba(224, 88, 59, 0.12);
-  --muted-violet: #746BEA;
-  --muted-violet-subtle: rgba(116, 107, 234, 0.12);
+  /* Theme Accents: Emerald, Rose, Indigo */
+  --emerald-accent: #059669;
+  --emerald-accent-hover: #047857;
+  --emerald-subtle: rgba(16, 185, 129, 0.12);
+  --emerald-text: #065F46;
+
+  --rose-accent: #E11D48;
+  --rose-subtle: rgba(225, 29, 72, 0.1);
+
+  --indigo-accent: #4F46E5;
+  --indigo-subtle: rgba(79, 70, 229, 0.1);
 }
 
 .dark {
-  /* Midnight Plum dark theme */
-  --bg-primary: #17152B;
-  --bg-surface: #201D38;
-  --bg-surface-elevated: #282447;
-  --bg-subtle: #1D1A33;
-  --border-subtle: rgba(139, 131, 246, 0.16);
-  --border-strong: rgba(139, 131, 246, 0.32);
+  /* Linear / Apple Pay Deep Zinc Dark Theme */
+  --bg-primary: #09090B;
+  --bg-surface: #121215;
+  --bg-surface-elevated: #18181B;
+  --bg-subtle: #202024;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
 
-  --text-primary: #F6F5F1;
-  --text-secondary: #B1ACCD;
-  --text-muted: #7E789F;
+  --text-primary: #FAFAFA;
+  --text-secondary: #A1A1AA;
+  --text-muted: #71717A;
 
-  /* Theme Accents */
-  --midnight-plum: #17152B;
-  --electric-lime: #B8F36B;
-  --electric-lime-text: #17152B;
-  --electric-lime-subtle: rgba(184, 243, 107, 0.15);
-  --soft-coral: #FF8C72;
-  --soft-coral-subtle: rgba(255, 140, 114, 0.15);
-  --muted-violet: #8B83F6;
-  --muted-violet-subtle: rgba(139, 131, 246, 0.18);
+  /* Theme Accents: Vibrant Emerald, Rose, Indigo */
+  --emerald-accent: #10B981;
+  --emerald-accent-hover: #34D399;
+  --emerald-subtle: rgba(16, 185, 129, 0.15);
+  --emerald-text: #6EE7B7;
+
+  --rose-accent: #FB7185;
+  --rose-subtle: rgba(251, 113, 133, 0.15);
+
+  --indigo-accent: #818CF8;
+  --indigo-subtle: rgba(129, 140, 248, 0.15);
 }
 
 body {
@@ -70,7 +74,7 @@ body {
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--muted-violet);
+  background: var(--text-muted);
 }
 
 /* Numeric tabular formatting for financial figures */

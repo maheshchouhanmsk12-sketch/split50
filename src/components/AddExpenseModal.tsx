@@ -104,37 +104,35 @@ export function AddExpenseModal() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isSubmitting) return;
+    setError(null);
 
-    const trimmedTitle = title.trim();
-    if (!trimmedTitle) {
-      setError("Please enter an expense title.");
+    if (!title.trim()) {
+      setError("Please enter an expense title");
       return;
     }
 
-    const paise = inrToPaise(amountStr);
-    if (paise <= 0) {
-      setError("Please enter a valid positive amount in ₹.");
+    const amountPaise = inrToPaise(amountStr);
+    if (amountPaise <= 0) {
+      setError("Please enter a valid amount greater than ₹0");
       return;
     }
 
     if (!paidById) {
-      setError("Please select who paid for this expense.");
+      setError("Please select who paid");
       return;
     }
 
     if (splitAmongIds.length === 0) {
-      setError("Please select at least one person to split with.");
+      setError("Please select at least one person to split with");
       return;
     }
 
     setIsSubmitting(true);
-
     try {
       if (editingExpense) {
         updateExpense(editingExpense.id, {
-          title: trimmedTitle,
-          amountPaise: paise,
+          title: title.trim(),
+          amountPaise,
           date,
           paidById,
           splitAmongIds,
@@ -143,8 +141,8 @@ export function AddExpenseModal() {
         });
       } else {
         addExpense({
-          title: trimmedTitle,
-          amountPaise: paise,
+          title: title.trim(),
+          amountPaise,
           date,
           paidById,
           splitAmongIds,
@@ -183,7 +181,7 @@ export function AddExpenseModal() {
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-[#B8F36B] text-[#17152B] font-bold">
+            <div className="p-2.5 rounded-2xl bg-emerald-500 text-zinc-950 font-bold">
               {editingExpense ? <FileText className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
             </div>
             <div>
@@ -205,14 +203,14 @@ export function AddExpenseModal() {
         </div>
 
         {error && (
-          <div className="mt-4 p-3 rounded-2xl bg-[#FF8C72]/15 border border-[#FF8C72]/30 text-[#FF8C72] text-xs font-semibold">
+          <div className="mt-4 p-3 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-500 text-xs font-semibold">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="mt-5 space-y-5">
           {/* Amount Input with big numbers */}
-          <div className="rounded-2xl p-4 bg-[var(--bg-subtle)] border border-[var(--border-subtle)] focus-within:border-[var(--muted-violet)] transition-colors">
+          <div className="rounded-2xl p-4 bg-[var(--bg-subtle)] border border-[var(--border-subtle)] focus-within:border-emerald-500 transition-colors">
             <label className="block text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider mb-1">
               Amount (INR)
             </label>
@@ -235,7 +233,7 @@ export function AddExpenseModal() {
             </div>
             {liveShare > 0 && splitAmongIds.length > 0 && (
               <p className="mt-2 text-xs font-medium text-[var(--text-secondary)]">
-                Equal share: <span className="text-[#B8F36B] font-bold">{formatPaise(liveShare)}</span> each
+                Equal share: <span className="text-emerald-500 font-bold">{formatPaise(liveShare)}</span> each
                 ({splitAmongIds.length} {splitAmongIds.length === 1 ? "person" : "people"})
               </p>
             )}
@@ -254,7 +252,7 @@ export function AddExpenseModal() {
                 setTitle(e.target.value);
                 if (error) setError(null);
               }}
-              className="w-full px-4 py-3 rounded-2xl bg-[var(--bg-subtle)] border border-[var(--border-subtle)] text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--muted-violet)] text-sm font-medium transition-colors"
+              className="w-full px-4 py-3 rounded-2xl bg-[var(--bg-subtle)] border border-[var(--border-subtle)] text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-emerald-500 text-sm font-medium transition-colors"
               required
             />
           </div>
@@ -274,7 +272,7 @@ export function AddExpenseModal() {
                     onClick={() => setCategory(cat.key)}
                     className={`flex items-center gap-2 p-2.5 rounded-xl border text-xs font-semibold transition-all duration-150 active:scale-95 ${
                       isSelected
-                        ? "bg-[#8B83F6] text-[#FFFFFF] border-[#8B83F6] shadow-sm"
+                        ? "bg-emerald-500 text-zinc-950 font-bold border-emerald-500 shadow-sm"
                         : "bg-[var(--bg-subtle)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-strong)]"
                     }`}
                   >
@@ -302,13 +300,13 @@ export function AddExpenseModal() {
                     onClick={() => setPaidById(partner.id)}
                     className={`flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs font-bold transition-all active:scale-95 ${
                       isSelected
-                        ? "bg-[#B8F36B] text-[#17152B] border-[#B8F36B] shadow-sm"
+                        ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 shadow-sm"
                         : "bg-[var(--bg-subtle)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:border-[var(--border-strong)] hover:text-[var(--text-primary)]"
                     }`}
                   >
                     <span
                       className="w-2.5 h-2.5 rounded-full"
-                      style={{ backgroundColor: partner.avatarColor || "#8B83F6" }}
+                      style={{ backgroundColor: partner.avatarColor || "#10B981" }}
                     />
                     {partner.name}
                   </button>
@@ -327,7 +325,7 @@ export function AddExpenseModal() {
               <button
                 type="button"
                 onClick={handleSelectAllPartners}
-                className="text-xs font-medium text-[var(--muted-violet)] hover:underline"
+                className="text-xs font-medium text-emerald-500 hover:underline"
               >
                 Select All
               </button>
@@ -344,14 +342,14 @@ export function AddExpenseModal() {
                       onClick={() => handleToggleSplitPartner(partner.id)}
                       className={`flex items-center justify-between p-2.5 rounded-xl border text-xs font-semibold transition-all active:scale-95 ${
                         isChecked
-                          ? "bg-[var(--bg-surface-elevated)] border-[#B8F36B] text-[var(--text-primary)]"
+                          ? "bg-[var(--bg-surface-elevated)] border-emerald-500 text-[var(--text-primary)]"
                           : "bg-[var(--bg-subtle)] border-[var(--border-subtle)] text-[var(--text-muted)] opacity-60"
                       }`}
                     >
                       <span className="truncate flex items-center gap-2">
                         <span
                           className="w-2 h-2 rounded-full"
-                          style={{ backgroundColor: partner.avatarColor || "#8B83F6" }}
+                          style={{ backgroundColor: partner.avatarColor || "#10B981" }}
                         />
                         {partner.name}
                         {partner.isArchived && " (Past)"}
@@ -359,7 +357,7 @@ export function AddExpenseModal() {
                       <div
                         className={`w-4 h-4 rounded-md flex items-center justify-center border ${
                           isChecked
-                            ? "bg-[#B8F36B] border-[#B8F36B] text-[#17152B]"
+                            ? "bg-emerald-500 border-emerald-500 text-zinc-950"
                             : "border-[var(--border-strong)]"
                         }`}
                       >
@@ -382,7 +380,7 @@ export function AddExpenseModal() {
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border-subtle)] text-xs font-medium text-[var(--text-primary)] focus:outline-none focus:border-[var(--muted-violet)]"
+                className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border-subtle)] text-xs font-medium text-[var(--text-primary)] focus:outline-none focus:border-emerald-500"
                 required
               />
             </div>
@@ -397,7 +395,7 @@ export function AddExpenseModal() {
                 placeholder="e.g. Paid via UPI"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border-subtle)] text-xs font-medium text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--muted-violet)]"
+                className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border-subtle)] text-xs font-medium text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-emerald-500"
               />
             </div>
           </div>
@@ -414,7 +412,7 @@ export function AddExpenseModal() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-2.5 rounded-xl text-xs font-bold bg-[#B8F36B] text-[#17152B] hover:brightness-105 active:scale-95 transition-all shadow-md shadow-[#B8F36B]/15"
+              className="px-6 py-2.5 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-zinc-950 active:scale-95 transition-all shadow-md shadow-emerald-500/20"
             >
               {editingExpense ? "Save Changes" : "+ Add Expense"}
             </button>

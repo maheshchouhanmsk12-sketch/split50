@@ -38,8 +38,8 @@ export function ConfirmModal({
             <div
               className={`p-2.5 rounded-2xl ${
                 isDestructive
-                  ? "bg-[#FF8C72]/15 text-[#FF8C72]"
-                  : "bg-[#8B83F6]/15 text-[#8B83F6]"
+                  ? "bg-rose-500/10 text-rose-500"
+                  : "bg-emerald-500/10 text-emerald-500"
               }`}
             >
               <AlertTriangle className="w-5 h-5" />
@@ -70,10 +70,10 @@ export function ConfirmModal({
           <button
             type="button"
             onClick={onConfirm}
-            className={`px-5 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-md active:scale-95 ${
+            className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md active:scale-95 ${
               isDestructive
-                ? "bg-[#FF8C72] text-[#17152B] hover:brightness-105"
-                : "bg-[#B8F36B] text-[#17152B] hover:brightness-105"
+                ? "bg-rose-500 text-zinc-950 hover:bg-rose-400"
+                : "bg-emerald-500 text-zinc-950 hover:bg-emerald-400"
             }`}
           >
             {confirmLabel}
@@ -83,4 +83,3 @@ export function ConfirmModal({
     </div>
   );
 }
-

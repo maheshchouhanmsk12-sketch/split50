@@ -96,7 +96,6 @@ export function ExpenseList() {
 
     for (const exp of filteredExpenses) {
       const expDate = new Date(exp.date);
-      // Valid date check
       const isValidDate = !isNaN(expDate.getTime());
       const monthKey = isValidDate
         ? `${expDate.getFullYear()}-${String(expDate.getMonth() + 1).padStart(2, "0")}`
@@ -118,7 +117,6 @@ export function ExpenseList() {
     const sortedKeys = Array.from(map.keys()).sort().reverse();
     for (const key of sortedKeys) {
       const g = map.get(key)!;
-      // Ensure items within month are sorted newest date first
       g.items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
       groups.push({
         monthKey: key,
@@ -139,7 +137,7 @@ export function ExpenseList() {
     <>
       <div className="space-y-6">
         {/* Passbook Header & Filters */}
-        <div className="rounded-3xl p-6 border shadow-sm bg-[var(--bg-surface)] border-[var(--border-subtle)] space-y-4">
+        <div className="rounded-3xl p-6 sm:p-7 border shadow-sm bg-[var(--bg-surface)] border-[var(--border-subtle)] space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-[var(--text-primary)]">
@@ -156,7 +154,7 @@ export function ExpenseList() {
                 setEditingExpense(null);
                 setIsAddExpenseOpen(true);
               }}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl font-bold text-xs bg-[#B8F36B] text-[#17152B] hover:brightness-105 active:scale-95 transition-all shadow-md shadow-[#B8F36B]/15 self-start sm:self-auto"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl font-bold text-xs bg-emerald-500 hover:bg-emerald-400 text-zinc-950 active:scale-95 transition-all shadow-md shadow-emerald-500/20 self-start sm:self-auto"
             >
               <Plus className="w-4 h-4 stroke-[3]" />
               <span>+ Add Expense</span>
@@ -173,7 +171,7 @@ export function ExpenseList() {
                 placeholder="Search description, category, person..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border-subtle)] text-xs font-medium text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--muted-violet)]"
+                className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border-subtle)] text-xs font-medium text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-emerald-500"
               />
             </div>
 
@@ -182,7 +180,7 @@ export function ExpenseList() {
               <select
                 value={partnerFilter}
                 onChange={(e) => setPartnerFilter(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border-subtle)] text-xs font-semibold text-[var(--text-primary)] focus:outline-none focus:border-[var(--muted-violet)]"
+                className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border-subtle)] text-xs font-semibold text-[var(--text-primary)] focus:outline-none focus:border-emerald-500"
               >
                 <option value="ALL">All Partners</option>
                 {partners.map((p) => (
@@ -198,7 +196,7 @@ export function ExpenseList() {
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border-subtle)] text-xs font-semibold text-[var(--text-primary)] focus:outline-none focus:border-[var(--muted-violet)]"
+                className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border-subtle)] text-xs font-semibold text-[var(--text-primary)] focus:outline-none focus:border-emerald-500"
               >
                 <option value="ALL">All Categories</option>
                 {CATEGORIES.map((c) => (
@@ -233,7 +231,7 @@ export function ExpenseList() {
                   setEditingExpense(null);
                   setIsAddExpenseOpen(true);
                 }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-[#B8F36B] text-[#17152B] hover:brightness-105 active:scale-95 transition-all shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-zinc-950 active:scale-95 transition-all shadow-sm"
               >
                 <Plus className="w-4 h-4 stroke-[3]" />
                 Add First Expense
@@ -250,12 +248,12 @@ export function ExpenseList() {
                 {/* Month Group Header */}
                 <div className="flex items-center justify-between pb-3 border-b border-[var(--border-subtle)]">
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-[#8B83F6]" />
+                    <Calendar className="w-4 h-4 text-emerald-500" />
                     <h2 className="text-sm font-bold tracking-tight text-[var(--text-primary)]">
                       {group.monthLabel}
                     </h2>
                   </div>
-                  <div className="text-xs font-extrabold text-[#B8F36B] font-tabular">
+                  <div className="text-xs font-extrabold text-emerald-600 dark:text-emerald-400 font-tabular">
                     Monthly Total: {formatPaise(group.totalPaise)}
                   </div>
                 </div>
@@ -274,7 +272,7 @@ export function ExpenseList() {
                       >
                         {/* Left: icon & details */}
                         <div className="flex items-start gap-3.5 min-w-0">
-                          <div className="w-10 h-10 rounded-2xl flex items-center justify-center bg-[var(--bg-subtle)] text-[#8B83F6] shrink-0 mt-0.5">
+                          <div className="w-10 h-10 rounded-2xl flex items-center justify-center bg-[var(--bg-subtle)] text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5">
                             {getCategoryIcon(exp.category)}
                           </div>
                           <div className="min-w-0 space-y-1">
@@ -293,7 +291,7 @@ export function ExpenseList() {
                               <span className="flex items-center gap-1 font-medium text-[var(--text-primary)]">
                                 <span
                                   className="w-2 h-2 rounded-full inline-block"
-                                  style={{ backgroundColor: payer?.avatarColor || "#8B83F6" }}
+                                  style={{ backgroundColor: payer?.avatarColor || "#10B981" }}
                                 />
                                 Paid by {payer?.name || "Unknown"}
                               </span>
@@ -327,7 +325,7 @@ export function ExpenseList() {
                             </button>
                             <button
                               onClick={() => setDeleteTargetId(exp.id)}
-                              className="p-2 rounded-xl text-[var(--text-muted)] hover:text-[#FF8C72] hover:bg-[var(--bg-subtle)] transition-colors"
+                              className="p-2 rounded-xl text-[var(--text-muted)] hover:text-rose-500 hover:bg-[var(--bg-subtle)] transition-colors"
                               title="Delete expense"
                             >
                               <Trash2 className="w-4 h-4" />

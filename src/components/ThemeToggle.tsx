@@ -15,11 +15,10 @@ export function ThemeToggle() {
       title={`Switch to ${resolvedTheme === "dark" ? "light" : "dark"} mode`}
     >
       {resolvedTheme === "dark" ? (
-        <Sun className="w-4 h-4 text-[#B8F36B]" />
+        <Sun className="w-4 h-4 text-emerald-400" />
       ) : (
-        <Moon className="w-4 h-4 text-[#8B83F6]" />
+        <Moon className="w-4 h-4 text-zinc-700" />
       )}
     </button>
   );
 }
-

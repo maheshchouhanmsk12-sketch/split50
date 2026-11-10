@@ -39,7 +39,7 @@ export function WhatsAppModal({ isOpen, onClose }: WhatsAppModalProps) {
       >
         <div className="flex items-center justify-between pb-4 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-[#B8F36B]/15 text-[#B8F36B]">
+            <div className="p-2.5 rounded-2xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
               <MessageSquareShare className="w-5 h-5" />
             </div>
             <div>
@@ -71,7 +71,7 @@ export function WhatsAppModal({ isOpen, onClose }: WhatsAppModalProps) {
           >
             {copied ? (
               <>
-                <Check className="w-4 h-4 text-[#B8F36B]" />
+                <Check className="w-4 h-4 text-emerald-500" />
                 Copied!
               </>
             ) : (
@@ -87,7 +87,7 @@ export function WhatsAppModal({ isOpen, onClose }: WhatsAppModalProps) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={onClose}
-            className="w-full sm:flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-2xl font-bold text-sm transition-all duration-150 active:scale-95 bg-[#B8F36B] text-[#17152B] hover:brightness-105 shadow-md shadow-[#B8F36B]/10"
+            className="w-full sm:flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-2xl font-bold text-sm transition-all duration-150 active:scale-95 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 shadow-md shadow-emerald-500/20"
           >
             <ExternalLink className="w-4 h-4" />
             Open WhatsApp
@@ -97,4 +97,3 @@ export function WhatsAppModal({ isOpen, onClose }: WhatsAppModalProps) {
     </div>
   );
 }
-

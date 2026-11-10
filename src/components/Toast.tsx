@@ -17,18 +17,17 @@ export function ToastContainer() {
           className="pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-2xl shadow-xl border backdrop-blur-md transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 bg-[var(--bg-surface)] text-[var(--text-primary)] border-[var(--border-strong)]"
         >
           {toast.type === "success" && (
-            <CheckCircle2 className="w-5 h-5 text-[#B8F36B] shrink-0" />
+            <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
           )}
           {toast.type === "error" && (
-            <AlertCircle className="w-5 h-5 text-[#FF8C72] shrink-0" />
+            <AlertCircle className="w-5 h-5 text-rose-500 shrink-0" />
           )}
           {toast.type === "info" && (
-            <Info className="w-5 h-5 text-[#8B83F6] shrink-0" />
+            <Info className="w-5 h-5 text-indigo-500 dark:text-indigo-400 shrink-0" />
           )}
-          <p className="text-sm font-medium tracking-tight leading-snug">{toast.message}</p>
+          <p className="text-sm font-semibold tracking-tight leading-snug">{toast.message}</p>
         </div>
       ))}
     </div>
   );
 }
-
