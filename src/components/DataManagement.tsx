@@ -188,7 +188,7 @@ export function DataManagement() {
             <button
               type="button"
               onClick={() => setConfirmResetAll(true)}
-              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-rose-500 text-zinc-950 font-bold text-xs hover:bg-rose-400 transition-all active:scale-95 shadow-md shadow-rose-500/20"
+              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-rose-600 text-white font-bold text-xs hover:bg-rose-500 transition-all active:scale-95 shadow-md shadow-rose-600/20"
             >
               <Trash2 className="w-4 h-4" />
               <span>Reset Entire App</span>

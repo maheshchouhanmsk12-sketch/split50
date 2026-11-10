@@ -154,7 +154,7 @@ export function ExpenseList() {
                 setEditingExpense(null);
                 setIsAddExpenseOpen(true);
               }}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl font-bold text-xs bg-emerald-500 hover:bg-emerald-400 text-zinc-950 active:scale-95 transition-all shadow-md shadow-emerald-500/20 self-start sm:self-auto"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl font-bold text-xs bg-[#B8F36B] hover:brightness-105 text-[#17152B] active:scale-[0.98] transition-all shadow-md shadow-[#B8F36B]/20 self-start sm:self-auto"
             >
               <Plus className="w-4 h-4 stroke-[3]" />
               <span>+ Add Expense</span>
@@ -231,7 +231,7 @@ export function ExpenseList() {
                   setEditingExpense(null);
                   setIsAddExpenseOpen(true);
                 }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-zinc-950 active:scale-95 transition-all shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-[#B8F36B] hover:brightness-105 text-[#17152B] active:scale-95 transition-all shadow-sm"
               >
                 <Plus className="w-4 h-4 stroke-[3]" />
                 Add First Expense

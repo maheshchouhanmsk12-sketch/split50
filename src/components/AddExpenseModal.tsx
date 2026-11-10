@@ -181,8 +181,8 @@ export function AddExpenseModal() {
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-emerald-500 text-zinc-950 font-bold">
-              {editingExpense ? <FileText className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+            <div className="p-2.5 rounded-2xl bg-[#B8F36B] text-[#17152B] font-bold">
+              {editingExpense ? <FileText className="w-5 h-5" /> : <Plus className="w-5 h-5 stroke-[2.5]" />}
             </div>
             <div>
               <h2 className="text-xl font-bold tracking-tight">
@@ -272,7 +272,7 @@ export function AddExpenseModal() {
                     onClick={() => setCategory(cat.key)}
                     className={`flex items-center gap-2 p-2.5 rounded-xl border text-xs font-semibold transition-all duration-150 active:scale-95 ${
                       isSelected
-                        ? "bg-emerald-500 text-zinc-950 font-bold border-emerald-500 shadow-sm"
+                        ? "bg-[#B8F36B] text-[#17152B] font-bold border-[#B8F36B] shadow-sm"
                         : "bg-[var(--bg-subtle)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-strong)]"
                     }`}
                   >
@@ -412,7 +412,7 @@ export function AddExpenseModal() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-2.5 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-zinc-950 active:scale-95 transition-all shadow-md shadow-emerald-500/20"
+              className="px-6 py-2.5 rounded-xl text-xs font-bold bg-[#B8F36B] hover:brightness-105 text-[#17152B] active:scale-95 transition-all shadow-md shadow-[#B8F36B]/20"
             >
               {editingExpense ? "Save Changes" : "+ Add Expense"}
             </button>

@@ -97,7 +97,7 @@ export function PartnerManagement() {
           />
           <button
             type="submit"
-            className="px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-zinc-950 active:scale-95 transition-all flex items-center gap-1.5 shadow-sm"
+            className="px-4 py-2.5 rounded-xl text-xs font-bold bg-[#B8F36B] hover:brightness-105 text-[#17152B] active:scale-95 transition-all flex items-center gap-1.5 shadow-sm"
           >
             <UserPlus className="w-4 h-4" />
             <span>Add</span>

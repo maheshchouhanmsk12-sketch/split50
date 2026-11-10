@@ -87,7 +87,7 @@ export function WhatsAppModal({ isOpen, onClose }: WhatsAppModalProps) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={onClose}
-            className="w-full sm:flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-2xl font-bold text-sm transition-all duration-150 active:scale-95 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 shadow-md shadow-emerald-500/20"
+            className="w-full sm:flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-2xl font-bold text-sm transition-all duration-150 active:scale-95 bg-[#B8F36B] hover:brightness-105 text-[#17152B] shadow-md shadow-[#B8F36B]/20"
           >
             <ExternalLink className="w-4 h-4" />
             Open WhatsApp

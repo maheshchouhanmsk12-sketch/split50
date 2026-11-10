@@ -72,8 +72,8 @@ export function ConfirmModal({
             onClick={onConfirm}
             className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md active:scale-95 ${
               isDestructive
-                ? "bg-rose-500 text-zinc-950 hover:bg-rose-400"
-                : "bg-emerald-500 text-zinc-950 hover:bg-emerald-400"
+                ? "bg-rose-600 text-white hover:bg-rose-500"
+                : "bg-[#B8F36B] text-[#17152B] hover:brightness-105"
             }`}
           >
             {confirmLabel}

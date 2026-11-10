@@ -119,21 +119,61 @@ export function SettlementHero() {
           />
         </div>
 
-        {/* Partner contribution legends */}
-        <div className="flex items-center justify-between text-xs font-semibold text-white/90 pt-1">
-          <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[#B8F36B]" />
-            <span>
-              {p1?.partnerName || "Partner 1"} • {formatPaise(p1Paid)}
-            </span>
+        {/* Partner contribution legends & Net Pending Balances */}
+        <div className="space-y-2 pt-1">
+          <div className="flex items-center justify-between text-xs font-semibold text-white/90">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <span className="w-2 h-2 rounded-full bg-[#B8F36B] shrink-0" />
+              <span className="truncate">
+                {p1?.partnerName || "Partner 1"} • {formatPaise(p1Paid)}
+              </span>
+              {p1 && p1.netBalancePaise !== 0 && (
+                <span
+                  className={`text-[10px] px-1.5 py-0.5 rounded-md font-bold font-tabular shrink-0 ${
+                    p1.netBalancePaise > 0
+                      ? "bg-[#B8F36B]/20 text-[#B8F36B]"
+                      : "bg-[#FF8C72]/20 text-[#FF8C72]"
+                  }`}
+                  title={`${p1.partnerName}: ${p1.netBalancePaise > 0 ? "Receives" : "Owes"} ${formatPaise(Math.abs(p1.netBalancePaise))}`}
+                >
+                  {p1.netBalancePaise > 0
+                    ? `+${formatPaise(p1.netBalancePaise)}`
+                    : formatPaise(p1.netBalancePaise)}
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-center gap-1.5 min-w-0">
+              <span className="w-2 h-2 rounded-full bg-[#8B83F6] shrink-0" />
+              <span className="truncate">
+                {p2?.partnerName || "Partner 2"} • {formatPaise(p2Paid)}
+              </span>
+              {p2 && p2.netBalancePaise !== 0 && (
+                <span
+                  className={`text-[10px] px-1.5 py-0.5 rounded-md font-bold font-tabular shrink-0 ${
+                    p2.netBalancePaise > 0
+                      ? "bg-[#B8F36B]/20 text-[#B8F36B]"
+                      : "bg-[#FF8C72]/20 text-[#FF8C72]"
+                  }`}
+                  title={`${p2.partnerName}: ${p2.netBalancePaise > 0 ? "Receives" : "Owes"} ${formatPaise(Math.abs(p2.netBalancePaise))}`}
+                >
+                  {p2.netBalancePaise > 0
+                    ? `+${formatPaise(p2.netBalancePaise)}`
+                    : formatPaise(p2.netBalancePaise)}
+                </span>
+              )}
+            </div>
           </div>
 
-          <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[#8B83F6]" />
-            <span>
-              {p2?.partnerName || "Partner 2"} • {formatPaise(p2Paid)}
-            </span>
-          </div>
+          {/* Clear Settlement Instruction (Naam sahit kiska kitna baki hai) */}
+          {!isSettled && transfers.length > 0 && (
+            <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-[#A59EBF]">
+              <span>Settlement:</span>
+              <span className="font-bold text-[#B8F36B] truncate ml-2">
+                {transfers[0].fromName} needs to pay {transfers[0].toName} {formatPaise(transfers[0].amountPaise)}
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
