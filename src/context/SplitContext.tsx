@@ -4,6 +4,7 @@ import React, { createContext, useContext, useEffect, useState, useMemo, useCall
 import { Expense, Partner, SettlementSummary, Split50StorageState } from "@/types";
 import {
   DEFAULT_PARTNERS,
+  DEFAULT_EXPENSES,
   INITIAL_STORAGE_STATE,
   loadFromLocalStorage,
   saveToLocalStorage,
@@ -222,7 +223,7 @@ export function SplitProvider({ children }: { children: React.ReactNode }) {
 
   const resetAll = useCallback(() => {
     setPartners(DEFAULT_PARTNERS);
-    setExpenses([]);
+    setExpenses(DEFAULT_EXPENSES);
     showToast("Application reset to default state.", "info");
   }, [showToast]);
 

@@ -6,25 +6,52 @@ export const CURRENT_SCHEMA_VERSION = 1;
 
 export const DEFAULT_PARTNERS: Partner[] = [
   {
-    id: "partner-rahul",
-    name: "Rahul",
+    id: "partner-mahesh",
+    name: "Mahesh",
     avatarColor: "#B8F36B",
     isArchived: false,
     createdAt: "2026-01-01T00:00:00.000Z",
   },
   {
-    id: "partner-amit",
-    name: "Amit",
+    id: "partner-abadh",
+    name: "Abadh",
     avatarColor: "#8B83F6",
     isArchived: false,
     createdAt: "2026-01-01T00:00:00.000Z",
   },
 ];
 
+export const DEFAULT_EXPENSES: Expense[] = [
+  {
+    id: "exp-sample-1",
+    title: "Room Rent",
+    amountPaise: 500000,
+    date: "2026-11-10",
+    paidById: "partner-mahesh",
+    splitAmongIds: ["partner-mahesh", "partner-abadh"],
+    category: "Rent",
+    description: "Monthly room rent contribution",
+    createdAt: "2026-11-10T10:00:00.000Z",
+    updatedAt: "2026-11-10T10:00:00.000Z",
+  },
+  {
+    id: "exp-sample-2",
+    title: "Groceries & Supplies",
+    amountPaise: 300000,
+    date: "2026-11-10",
+    paidById: "partner-abadh",
+    splitAmongIds: ["partner-mahesh", "partner-abadh"],
+    category: "Groceries",
+    description: "Weekly room supplies & food",
+    createdAt: "2026-11-10T11:00:00.000Z",
+    updatedAt: "2026-11-10T11:00:00.000Z",
+  },
+];
+
 export const INITIAL_STORAGE_STATE: Split50StorageState = {
   version: CURRENT_SCHEMA_VERSION,
   partners: DEFAULT_PARTNERS,
-  expenses: [],
+  expenses: DEFAULT_EXPENSES,
   lastUpdated: "2026-01-01T00:00:00.000Z",
 };
 
@@ -74,14 +101,24 @@ export function validateStorageState(data: unknown): {
       typeof p.name === "string" &&
       p.name.trim()
     ) {
+      let partnerName = p.name.trim();
+      const partnerId = p.id.trim();
+
+      // Automatically migrate legacy placeholder names to user's partners
+      if (partnerName === "Rahul" || partnerId === "partner-rahul") {
+        partnerName = "Mahesh";
+      } else if (partnerName === "Amit" || partnerId === "partner-amit") {
+        partnerName = "Abadh";
+      }
+
       validatedPartners.push({
-        id: p.id.trim(),
-        name: p.name.trim(),
+        id: partnerId,
+        name: partnerName,
         avatarColor: typeof p.avatarColor === "string" ? p.avatarColor : undefined,
         isArchived: Boolean(p.isArchived),
         createdAt: typeof p.createdAt === "string" ? p.createdAt : new Date().toISOString(),
       });
-      partnerIds.add(p.id.trim());
+      partnerIds.add(partnerId);
     }
   }
 
@@ -154,6 +191,11 @@ export function loadFromLocalStorage(): Split50StorageState {
 
     if (!isValid) {
       console.warn("Storage validation found issues, using sanitized fallback state");
+    }
+
+    // If existing storage had no recorded expenses, populate default sample expenses
+    if (state.expenses.length === 0) {
+      state.expenses = DEFAULT_EXPENSES;
     }
 
     return state;

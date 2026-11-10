@@ -51,32 +51,22 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* Creator Credit Section */}
-      <div className="mt-12 pt-6 border-t border-[var(--border-subtle)] flex flex-col items-center justify-center text-center">
-        <span className="text-[11px] font-semibold uppercase tracking-widest text-[var(--text-muted)]">
-          Created By
-        </span>
-        <span className="text-base font-extrabold tracking-wide text-[#B8F36B] mt-1">
-          MAHESH KHAROL
-        </span>
-        <a
-          href="tel:9009958903"
-          className="mt-1.5 inline-flex items-center gap-1.5 text-sm font-bold text-[#8B83F6] hover:text-[#B8F36B] transition-colors font-tabular active:scale-95"
-          aria-label="Call MAHESH KHAROL at 9009958903"
-        >
-          <Phone className="w-3.5 h-3.5" />
-          <span>9009958903</span>
-        </a>
-      </div>
-
       {/* Footer */}
-      <footer className="mt-6 pt-4 border-t border-[var(--border-subtle)]/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[var(--text-muted)]">
+      <footer className="mt-12 pt-6 border-t border-[var(--border-subtle)] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[var(--text-muted)]">
         <div className="flex items-center gap-1.5">
           <ShieldCheck className="w-4 h-4 text-[#B8F36B]" />
           <span>Split50 • Client-Side & Private • Exact Integer Precision</span>
         </div>
-        <div className="flex items-center gap-1">
-          <span>Designed with simplicity</span>
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-[#B8F36B]">MAHESH KHAROL</span>
+          <span>•</span>
+          <a
+            href="tel:9009958903"
+            className="hover:text-[#B8F36B] transition-colors font-semibold font-tabular"
+            aria-label="Call 9009958903"
+          >
+            9009958903
+          </a>
         </div>
       </footer>
     </div>
