@@ -1,55 +1,39 @@
 @import "tailwindcss";
 
 :root {
-  /* Apple Pay / Linear / CRED Fintech Light Theme */
-  --bg-primary: #FAFAFA;
+  --bg-primary: #F4F3EF;
   --bg-surface: #FFFFFF;
-  --bg-surface-elevated: #F4F4F5;
-  --bg-subtle: #F0F0F2;
-  --border-subtle: rgba(24, 24, 27, 0.08);
-  --border-strong: rgba(24, 24, 27, 0.16);
+  --bg-surface-elevated: #FFFFFF;
+  --bg-subtle: #EDECE6;
+  --border-subtle: rgba(23, 21, 43, 0.08);
+  --border-strong: rgba(23, 21, 43, 0.16);
 
-  --text-primary: #09090B;
-  --text-secondary: #52525B;
-  --text-muted: #71717A;
+  --text-primary: #17152B;
+  --text-secondary: #585375;
+  --text-muted: #847F9E;
 
-  /* Theme Accents: Emerald, Rose, Indigo */
-  --emerald-accent: #059669;
-  --emerald-accent-hover: #047857;
-  --emerald-subtle: rgba(16, 185, 129, 0.12);
-  --emerald-text: #065F46;
-
-  --rose-accent: #E11D48;
-  --rose-subtle: rgba(225, 29, 72, 0.1);
-
-  --indigo-accent: #4F46E5;
-  --indigo-subtle: rgba(79, 70, 229, 0.1);
+  --midnight-plum: #17152B;
+  --electric-lime: #B8F36B;
+  --soft-violet: #8B83F6;
+  --soft-coral: #FF8C72;
 }
 
 .dark {
-  /* Linear / Apple Pay Deep Zinc Dark Theme */
-  --bg-primary: #09090B;
-  --bg-surface: #121215;
-  --bg-surface-elevated: #18181B;
-  --bg-subtle: #202024;
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.14);
+  --bg-primary: #0E0C1C;
+  --bg-surface: #17152B;
+  --bg-surface-elevated: #201D38;
+  --bg-subtle: #1C1933;
+  --border-subtle: rgba(139, 131, 246, 0.16);
+  --border-strong: rgba(139, 131, 246, 0.3);
 
-  --text-primary: #FAFAFA;
-  --text-secondary: #A1A1AA;
-  --text-muted: #71717A;
+  --text-primary: #FFFFFF;
+  --text-secondary: #A59EBF;
+  --text-muted: #7E789F;
 
-  /* Theme Accents: Vibrant Emerald, Rose, Indigo */
-  --emerald-accent: #10B981;
-  --emerald-accent-hover: #34D399;
-  --emerald-subtle: rgba(16, 185, 129, 0.15);
-  --emerald-text: #6EE7B7;
-
-  --rose-accent: #FB7185;
-  --rose-subtle: rgba(251, 113, 133, 0.15);
-
-  --indigo-accent: #818CF8;
-  --indigo-subtle: rgba(129, 140, 248, 0.15);
+  --midnight-plum: #17152B;
+  --electric-lime: #B8F36B;
+  --soft-violet: #8B83F6;
+  --soft-coral: #FF8C72;
 }
 
 body {
@@ -61,23 +45,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom Scrollbar for clean fintech feel */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border-strong);
-  border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
-}
-
-/* Numeric tabular formatting for financial figures */
 .font-tabular {
   font-variant-numeric: tabular-nums;
 }

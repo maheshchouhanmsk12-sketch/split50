@@ -6,8 +6,6 @@ import { formatPaise } from "@/lib/calculations";
 import { CATEGORIES } from "@/lib/categories";
 import { ConfirmModal } from "./ConfirmModal";
 import {
-  ArrowRight,
-  Plus,
   ShoppingBag,
   Home,
   Zap,
@@ -21,8 +19,29 @@ import {
   Trash2,
 } from "lucide-react";
 
+function formatDisplayDate(dateStr: string): string {
+  try {
+    const today = new Date();
+    const todayStr = today.toISOString().slice(0, 10);
+    if (dateStr === todayStr) return "Today";
+
+    const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+    const yesterdayStr = yesterday.toISOString().slice(0, 10);
+    if (dateStr === yesterdayStr) return "Yesterday";
+
+    const [year, month, day] = dateStr.split("-").map(Number);
+    if (year && month && day) {
+      const d = new Date(year, month - 1, day);
+      return d.toLocaleDateString("en-US", { day: "numeric", month: "short" });
+    }
+    return dateStr;
+  } catch {
+    return dateStr;
+  }
+}
+
 export function RecentExpenses() {
-  const { expenses, partners, setActiveTab, setIsAddExpenseOpen, setEditingExpense, deleteExpense } = useSplit();
+  const { expenses, partners, setActiveTab, setEditingExpense, deleteExpense } = useSplit();
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
   const recent = expenses.slice(0, 5);
@@ -31,112 +50,131 @@ export function RecentExpenses() {
     return partners.find((p) => p.id === id)?.name || "Unknown";
   };
 
-  const getCategoryIcon = (categoryName: string) => {
-    const meta = CATEGORIES.find((c) => c.key === categoryName);
-    switch (meta?.iconName) {
-      case "ShoppingBag": return <ShoppingBag className="w-4 h-4" />;
-      case "Home": return <Home className="w-4 h-4" />;
-      case "Zap": return <Zap className="w-4 h-4" />;
-      case "CupSoda": return <CupSoda className="w-4 h-4" />;
-      case "Carrot": return <Carrot className="w-4 h-4" />;
-      case "Utensils": return <Utensils className="w-4 h-4" />;
-      case "Wifi": return <Wifi className="w-4 h-4" />;
-      case "Car": return <Car className="w-4 h-4" />;
-      default: return <Layers className="w-4 h-4" />;
+  const getCategoryTheme = (categoryName: string) => {
+    switch (categoryName) {
+      case "Groceries":
+        return {
+          icon: <ShoppingBag className="w-5 h-5" />,
+          boxClass: "bg-[#8B83F6]/15 text-[#8B83F6]",
+        };
+      case "Rent":
+        return {
+          icon: <Home className="w-5 h-5" />,
+          boxClass: "bg-[#FF8C72]/15 text-[#FF8C72]",
+        };
+      case "Food":
+        return {
+          icon: <Utensils className="w-5 h-5" />,
+          boxClass: "bg-[#B8F36B]/25 text-[#4D7C0F] dark:text-[#B8F36B]",
+        };
+      case "Electricity":
+        return {
+          icon: <Zap className="w-5 h-5" />,
+          boxClass: "bg-amber-500/15 text-amber-500",
+        };
+      case "Milk":
+        return {
+          icon: <CupSoda className="w-5 h-5" />,
+          boxClass: "bg-sky-500/15 text-sky-500",
+        };
+      case "Vegetables":
+        return {
+          icon: <Carrot className="w-5 h-5" />,
+          boxClass: "bg-emerald-500/15 text-emerald-500",
+        };
+      case "Internet":
+        return {
+          icon: <Wifi className="w-5 h-5" />,
+          boxClass: "bg-indigo-500/15 text-indigo-500",
+        };
+      case "Travel":
+        return {
+          icon: <Car className="w-5 h-5" />,
+          boxClass: "bg-cyan-500/15 text-cyan-500",
+        };
+      default:
+        return {
+          icon: <Layers className="w-5 h-5" />,
+          boxClass: "bg-purple-500/15 text-purple-500",
+        };
     }
   };
 
   return (
     <>
-      <div className="rounded-3xl p-6 sm:p-7 border shadow-sm bg-[var(--bg-surface)] border-[var(--border-subtle)]">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h2 className="text-base font-bold tracking-tight text-[var(--text-primary)]">
-              Recent Expenses
-            </h2>
-            <p className="text-xs text-[var(--text-secondary)]">Latest recorded transactions</p>
-          </div>
+      <div className="space-y-3">
+        {/* Header Row */}
+        <div className="flex items-center justify-between px-1">
+          <h2 className="text-base sm:text-lg font-bold tracking-tight text-gray-900 dark:text-white">
+            Recent Activity
+          </h2>
 
-          {expenses.length > 0 && (
-            <button
-              onClick={() => setActiveTab("expenses")}
-              className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline transition-colors"
-            >
-              <span>View Passbook</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          )}
+          <button
+            onClick={() => setActiveTab("expenses")}
+            className="text-xs font-bold text-[#8B83F6] hover:underline uppercase tracking-wide cursor-pointer"
+          >
+            VIEW ALL →
+          </button>
         </div>
 
-        {expenses.length === 0 ? (
-          <div className="py-10 text-center flex flex-col items-center justify-center">
-            <div className="w-12 h-12 rounded-2xl bg-[var(--bg-subtle)] flex items-center justify-center text-[var(--text-muted)] mb-3">
-              <ShoppingBag className="w-6 h-6" />
-            </div>
-            <p className="text-sm font-semibold text-[var(--text-primary)] mb-1">
-              No expenses yet
-            </p>
-            <p className="text-xs text-[var(--text-secondary)] max-w-xs mb-4">
-              Add your first expense to get started and see settlements calculated instantly.
-            </p>
-            <button
-              onClick={() => {
-                setEditingExpense(null);
-                setIsAddExpenseOpen(true);
-              }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-zinc-950 active:scale-95 transition-all shadow-sm"
-            >
-              <Plus className="w-3.5 h-3.5 stroke-[3]" />
-              Add First Expense
-            </button>
+        {/* Card List from Image 1 */}
+        {recent.length === 0 ? (
+          <div className="bg-white dark:bg-[#17152B] rounded-3xl p-8 text-center border border-gray-100 dark:border-white/5 shadow-sm text-gray-500 dark:text-gray-400 text-sm">
+            No expenses recorded yet.
           </div>
         ) : (
-          <div className="divide-y divide-[var(--border-subtle)]">
-            {recent.map((exp) => (
-              <div
-                key={exp.id}
-                className="py-3.5 flex items-center justify-between gap-3 group transition-colors"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-10 h-10 rounded-2xl flex items-center justify-center bg-[var(--bg-subtle)] text-emerald-600 dark:text-emerald-400 shrink-0">
-                    {getCategoryIcon(exp.category)}
+          <div className="bg-white dark:bg-[#17152B] rounded-3xl p-3 sm:p-4 shadow-sm border border-gray-100 dark:border-white/5 divide-y divide-gray-100 dark:divide-white/5">
+            {recent.map((exp) => {
+              const theme = getCategoryTheme(exp.category);
+
+              return (
+                <div
+                  key={exp.id}
+                  className="py-3 px-2 flex items-center justify-between gap-3 group transition-colors"
+                >
+                  <div className="flex items-center gap-3.5 min-w-0">
+                    {/* Category Icon Box */}
+                    <div
+                      className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 ${theme.boxClass}`}
+                    >
+                      {theme.icon}
+                    </div>
+
+                    <div className="min-w-0">
+                      <p className="text-sm font-bold text-gray-900 dark:text-white truncate">
+                        {exp.title}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 font-medium truncate mt-0.5">
+                        {formatDisplayDate(exp.date)} • Paid by {getPartnerName(exp.paidById)}
+                      </p>
+                    </div>
                   </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-bold text-[var(--text-primary)] truncate">
-                      {exp.title}
-                    </p>
-                    <div className="flex items-center gap-2 text-xs text-[var(--text-secondary)]">
-                      <span>{exp.date}</span>
-                      <span>•</span>
-                      <span className="truncate">Paid by {getPartnerName(exp.paidById)}</span>
+
+                  <div className="flex items-center gap-3 shrink-0">
+                    <span className="text-sm sm:text-base font-extrabold text-gray-900 dark:text-white font-tabular">
+                      {formatPaise(exp.amountPaise)}
+                    </span>
+
+                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button
+                        onClick={() => setEditingExpense(exp)}
+                        className="p-1.5 rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                        title="Edit"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => setDeleteTargetId(exp.id)}
+                        className="p-1.5 rounded-lg text-gray-400 hover:text-rose-500"
+                        title="Delete"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
                     </div>
                   </div>
                 </div>
-
-                <div className="flex items-center gap-3 shrink-0">
-                  <span className="text-sm font-extrabold text-[var(--text-primary)] font-tabular">
-                    {formatPaise(exp.amountPaise)}
-                  </span>
-
-                  <div className="flex items-center gap-1 sm:opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button
-                      onClick={() => setEditingExpense(exp)}
-                      className="p-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-subtle)]"
-                      title="Edit expense"
-                    >
-                      <Edit2 className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      onClick={() => setDeleteTargetId(exp.id)}
-                      className="p-1.5 rounded-lg text-[var(--text-muted)] hover:text-rose-500 hover:bg-[var(--bg-subtle)]"
-                      title="Delete expense"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
@@ -144,7 +182,7 @@ export function RecentExpenses() {
       <ConfirmModal
         isOpen={Boolean(deleteTargetId)}
         title="Delete Expense"
-        message="Are you sure you want to delete this expense? This will immediately recalculate all partners' balances."
+        message="Are you sure you want to delete this expense? This will immediately update all balances."
         confirmLabel="Delete"
         onConfirm={() => {
           if (deleteTargetId) {

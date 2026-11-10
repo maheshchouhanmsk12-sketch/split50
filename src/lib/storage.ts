@@ -24,27 +24,51 @@ export const DEFAULT_PARTNERS: Partner[] = [
 export const DEFAULT_EXPENSES: Expense[] = [
   {
     id: "exp-sample-1",
-    title: "Room Rent",
-    amountPaise: 500000,
-    date: "2026-11-10",
-    paidById: "partner-mahesh",
-    splitAmongIds: ["partner-mahesh", "partner-abadh"],
-    category: "Rent",
-    description: "Monthly room rent contribution",
-    createdAt: "2026-11-10T10:00:00.000Z",
-    updatedAt: "2026-11-10T10:00:00.000Z",
-  },
-  {
-    id: "exp-sample-2",
-    title: "Groceries & Supplies",
-    amountPaise: 300000,
+    title: "Monthly Rent",
+    amountPaise: 500000, // ₹5,000
     date: "2026-11-10",
     paidById: "partner-abadh",
     splitAmongIds: ["partner-mahesh", "partner-abadh"],
+    category: "Rent",
+    description: "Monthly room rent contribution",
+    createdAt: "2026-11-10T08:00:00.000Z",
+    updatedAt: "2026-11-10T08:00:00.000Z",
+  },
+  {
+    id: "exp-sample-2",
+    title: "Groceries",
+    amountPaise: 120000, // ₹1,200
+    date: "2026-11-10",
+    paidById: "partner-mahesh",
+    splitAmongIds: ["partner-mahesh", "partner-abadh"],
     category: "Groceries",
-    description: "Weekly room supplies & food",
-    createdAt: "2026-11-10T11:00:00.000Z",
-    updatedAt: "2026-11-10T11:00:00.000Z",
+    description: "Weekly supermarket run",
+    createdAt: "2026-11-10T09:00:00.000Z",
+    updatedAt: "2026-11-10T09:00:00.000Z",
+  },
+  {
+    id: "exp-sample-3",
+    title: "Dinner",
+    amountPaise: 80000, // ₹800
+    date: "2026-11-08",
+    paidById: "partner-mahesh",
+    splitAmongIds: ["partner-mahesh", "partner-abadh"],
+    category: "Food",
+    description: "Weekend food delivery",
+    createdAt: "2026-11-08T20:00:00.000Z",
+    updatedAt: "2026-11-08T20:00:00.000Z",
+  },
+  {
+    id: "exp-sample-4",
+    title: "Room Utilities & WiFi",
+    amountPaise: 100000, // ₹1,000
+    date: "2026-11-07",
+    paidById: "partner-mahesh",
+    splitAmongIds: ["partner-mahesh", "partner-abadh"],
+    category: "Internet",
+    description: "Monthly WiFi broadband bill",
+    createdAt: "2026-11-07T14:00:00.000Z",
+    updatedAt: "2026-11-07T14:00:00.000Z",
   },
 ];
 
