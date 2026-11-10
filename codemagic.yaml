@@ -7,7 +7,6 @@ workflows:
     environment:
       node: 22
       java: 21
-      android_sdk: 35
 
     triggering:
       events:
