@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { useSplit } from "@/context/SplitContext";
+import { useSplit, PARTNER_AVATAR_COLORS } from "@/context/SplitContext";
 import { formatPaise } from "@/lib/calculations";
 import { WhatsAppModal } from "./WhatsAppModal";
-import { MessageSquareShare } from "lucide-react";
+import { MessageSquareShare, Users, UserPlus } from "lucide-react";
 
 export function SettlementHero() {
-  const { summary, activePartners } = useSplit();
+  const { summary, activePartners, setIsMemberModalOpen } = useSplit();
   const [isShareOpen, setIsShareOpen] = useState(false);
 
   const { isSettled, headlineStatus, transfers, totalExpenditurePaise } = summary;
@@ -44,8 +44,16 @@ export function SettlementHero() {
             <span>{isSettled ? "ALL SETTLED" : "SETTLEMENT PENDING"}</span>
           </div>
 
-          {/* Month / Year */}
+          {/* Month / Year & Member Actions */}
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsMemberModalOpen(true)}
+              className="px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 transition-all text-[11px] font-bold text-white flex items-center gap-1.5 border border-white/10 active:scale-95"
+              title="Manage Dashboard Members"
+            >
+              <Users className="w-3.5 h-3.5 text-[#B8F36B]" />
+              <span>{activePartners.length} {activePartners.length === 1 ? "Member" : "Members"}</span>
+            </button>
             <button
               onClick={() => setIsShareOpen(true)}
               className="p-1 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-colors"
@@ -107,71 +115,125 @@ export function SettlementHero() {
           </div>
         </div>
 
-        {/* Dual-color Progress Bar */}
+        {/* Dual or Multi-color Progress Bar */}
         <div className="w-full h-3 rounded-full overflow-hidden flex bg-white/10 my-3">
-          <div
-            className="h-full bg-[#B8F36B] transition-all duration-500 rounded-l-full"
-            style={{ width: `${p1Percent}%` }}
-          />
-          <div
-            className="h-full bg-[#8B83F6] transition-all duration-500 rounded-r-full"
-            style={{ width: `${p2Percent}%` }}
-          />
+          {activePartners.length === 2 ? (
+            <>
+              <div
+                className="h-full bg-[#B8F36B] transition-all duration-500 rounded-l-full"
+                style={{ width: `${p1Percent}%` }}
+              />
+              <div
+                className="h-full bg-[#8B83F6] transition-all duration-500 rounded-r-full"
+                style={{ width: `${p2Percent}%` }}
+              />
+            </>
+          ) : (
+            activePartners.map((partner, idx) => {
+              const metric = summary.partnerMetrics.find((m) => m.partnerId === partner.id);
+              const paid = metric?.paidPaise || 0;
+              const total = summary.partnerMetrics.reduce((sum, m) => sum + m.paidPaise, 0);
+              const percent = total > 0 ? (paid / total) * 100 : 100 / activePartners.length;
+              const color = partner.avatarColor || PARTNER_AVATAR_COLORS[idx % PARTNER_AVATAR_COLORS.length];
+
+              return (
+                <div
+                  key={partner.id}
+                  className="h-full transition-all duration-500 first:rounded-l-full last:rounded-r-full"
+                  style={{
+                    width: `${percent}%`,
+                    backgroundColor: color,
+                  }}
+                  title={`${partner.name}: ${formatPaise(paid)}`}
+                />
+              );
+            })
+          )}
         </div>
 
         {/* Partner contribution legends & Net Pending Balances */}
         <div className="space-y-2 pt-1">
-          <div className="flex items-center justify-between text-xs font-semibold text-white/90">
-            <div className="flex items-center gap-1.5 min-w-0">
-              <span className="w-2 h-2 rounded-full bg-[#B8F36B] shrink-0" />
-              <span className="truncate">
-                {p1?.partnerName || "Partner 1"} • {formatPaise(p1Paid)}
-              </span>
-              {p1 && p1.netBalancePaise !== 0 && (
-                <span
-                  className={`text-[10px] px-1.5 py-0.5 rounded-md font-bold font-tabular shrink-0 ${
-                    p1.netBalancePaise > 0
-                      ? "bg-[#B8F36B]/20 text-[#B8F36B]"
-                      : "bg-[#FF8C72]/20 text-[#FF8C72]"
-                  }`}
-                  title={`${p1.partnerName}: ${p1.netBalancePaise > 0 ? "Receives" : "Owes"} ${formatPaise(Math.abs(p1.netBalancePaise))}`}
-                >
-                  {p1.netBalancePaise > 0
-                    ? `+${formatPaise(p1.netBalancePaise)}`
-                    : formatPaise(p1.netBalancePaise)}
-                </span>
-              )}
-            </div>
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-white/50">
+              MEMBER BALANCES
+            </span>
+            <button
+              type="button"
+              onClick={() => setIsMemberModalOpen(true)}
+              className="text-[11px] font-bold text-[#B8F36B] hover:underline flex items-center gap-1 active:scale-95"
+            >
+              <UserPlus className="w-3 h-3" />
+              <span>+ Add / Manage</span>
+            </button>
+          </div>
 
-            <div className="flex items-center gap-1.5 min-w-0">
-              <span className="w-2 h-2 rounded-full bg-[#8B83F6] shrink-0" />
-              <span className="truncate">
-                {p2?.partnerName || "Partner 2"} • {formatPaise(p2Paid)}
-              </span>
-              {p2 && p2.netBalancePaise !== 0 && (
-                <span
-                  className={`text-[10px] px-1.5 py-0.5 rounded-md font-bold font-tabular shrink-0 ${
-                    p2.netBalancePaise > 0
-                      ? "bg-[#B8F36B]/20 text-[#B8F36B]"
-                      : "bg-[#FF8C72]/20 text-[#FF8C72]"
-                  }`}
-                  title={`${p2.partnerName}: ${p2.netBalancePaise > 0 ? "Receives" : "Owes"} ${formatPaise(Math.abs(p2.netBalancePaise))}`}
+          <div
+            className={`grid ${
+              activePartners.length > 2 ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-2"
+            } gap-2 text-xs font-semibold text-white/90`}
+          >
+            {activePartners.map((partner, index) => {
+              const metric = summary.partnerMetrics.find((m) => m.partnerId === partner.id);
+              const paidPaise = metric?.paidPaise || 0;
+              const netBalancePaise = metric?.netBalancePaise || 0;
+              const dotColor =
+                activePartners.length === 2 && index === 0
+                  ? "#B8F36B"
+                  : activePartners.length === 2 && index === 1
+                  ? "#8B83F6"
+                  : partner.avatarColor || PARTNER_AVATAR_COLORS[index % PARTNER_AVATAR_COLORS.length];
+
+              return (
+                <div
+                  key={partner.id}
+                  className="flex items-center justify-between gap-1.5 min-w-0 bg-white/5 px-2.5 py-1.5 rounded-xl border border-white/5"
                 >
-                  {p2.netBalancePaise > 0
-                    ? `+${formatPaise(p2.netBalancePaise)}`
-                    : formatPaise(p2.netBalancePaise)}
-                </span>
-              )}
-            </div>
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <span
+                      className="w-2 h-2 rounded-full shrink-0"
+                      style={{ backgroundColor: dotColor }}
+                    />
+                    <span className="truncate">
+                      {partner.name} • {formatPaise(paidPaise)}
+                    </span>
+                  </div>
+                  {netBalancePaise !== 0 && (
+                    <span
+                      className={`text-[10px] px-1.5 py-0.5 rounded-md font-bold font-tabular shrink-0 ${
+                        netBalancePaise > 0
+                          ? "bg-[#B8F36B]/20 text-[#B8F36B]"
+                          : "bg-[#FF8C72]/20 text-[#FF8C72]"
+                      }`}
+                      title={`${partner.name}: ${
+                        netBalancePaise > 0 ? "Receives" : "Owes"
+                      } ${formatPaise(Math.abs(netBalancePaise))}`}
+                    >
+                      {netBalancePaise > 0
+                        ? `+${formatPaise(netBalancePaise)}`
+                        : formatPaise(netBalancePaise)}
+                    </span>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
           {/* Clear Settlement Instruction (Naam sahit kiska kitna baki hai) */}
           {!isSettled && transfers.length > 0 && (
-            <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-[#A59EBF]">
-              <span>Settlement:</span>
-              <span className="font-bold text-[#B8F36B] truncate ml-2">
-                {transfers[0].fromName} needs to pay {transfers[0].toName} {formatPaise(transfers[0].amountPaise)}
-              </span>
+            <div className="pt-2 border-t border-white/10 space-y-1">
+              {transfers.slice(0, 3).map((t, idx) => (
+                <div key={idx} className="flex items-center justify-between text-[11px] text-[#A59EBF]">
+                  <span>{transfers.length === 1 ? "Settlement:" : `Transfer ${idx + 1}:`}</span>
+                  <span className="font-bold text-[#B8F36B] truncate ml-2">
+                    {t.fromName} needs to pay {t.toName} {formatPaise(t.amountPaise)}
+                  </span>
+                </div>
+              ))}
+              {transfers.length > 3 && (
+                <p className="text-[10px] text-right text-[#A59EBF]">
+                  +{transfers.length - 3} more settlement payments
+                </p>
+              )}
             </div>
           )}
         </div>

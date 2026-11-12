@@ -28,6 +28,7 @@ export function AddExpenseModal() {
   const {
     isAddExpenseOpen,
     setIsAddExpenseOpen,
+    setIsMemberModalOpen,
     editingExpense,
     setEditingExpense,
     activePartners,
@@ -286,10 +287,19 @@ export function AddExpenseModal() {
 
           {/* Paid By Selector */}
           <div>
-            <label className="flex items-center gap-1.5 text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider mb-2">
-              <User className="w-3.5 h-3.5" />
-              Paid By
-            </label>
+            <div className="flex items-center justify-between mb-2">
+              <label className="flex items-center gap-1.5 text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
+                <User className="w-3.5 h-3.5" />
+                Paid By
+              </label>
+              <button
+                type="button"
+                onClick={() => setIsMemberModalOpen(true)}
+                className="text-xs font-bold text-emerald-600 dark:text-[#B8F36B] hover:underline"
+              >
+                + Add Member
+              </button>
+            </div>
             <div className="flex flex-wrap gap-2">
               {activePartners.map((partner) => {
                 const isSelected = paidById === partner.id;

@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import { SplitProvider } from "@/context/SplitContext";
 import { ToastContainer } from "@/components/Toast";
 import { AddExpenseModal } from "@/components/AddExpenseModal";
+import { MemberModal } from "@/components/MemberModal";
 import { Navbar } from "@/components/Navbar";
 import { AndroidBridge } from "@/components/AndroidBridge";
 
@@ -53,6 +54,7 @@ export default function RootLayout({
             <Navbar />
             <main className="flex-1 pb-24 md:pb-12">{children}</main>
             <AddExpenseModal />
+            <MemberModal />
             <ToastContainer />
           </SplitProvider>
         </ThemeProvider>

@@ -27,6 +27,8 @@ interface SplitContextValue {
   setActiveTab: (tab: "dashboard" | "expenses" | "settings") => void;
   isAddExpenseOpen: boolean;
   setIsAddExpenseOpen: (open: boolean) => void;
+  isMemberModalOpen: boolean;
+  setIsMemberModalOpen: (open: boolean) => void;
   editingExpense: Expense | null;
   setEditingExpense: (exp: Expense | null) => void;
 
@@ -37,6 +39,7 @@ interface SplitContextValue {
 
   addPartner: (name: string) => { success: boolean; error?: string };
   renamePartner: (id: string, name: string) => { success: boolean; error?: string };
+  deletePartner: (id: string) => { success: boolean; error?: string };
   archivePartner: (id: string) => { success: boolean; error?: string };
   unarchivePartner: (id: string) => { success: boolean; error?: string };
 
@@ -66,6 +69,7 @@ export function SplitProvider({ children }: { children: React.ReactNode }) {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [activeTab, setActiveTab] = useState<"dashboard" | "expenses" | "settings">("dashboard");
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
+  const [isMemberModalOpen, setIsMemberModalOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [toasts, setToasts] = useState<ToastInfo[]>([]);
 
@@ -115,43 +119,68 @@ export function SplitProvider({ children }: { children: React.ReactNode }) {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
-      setExpenses((prev) => [newExpense, ...prev]);
+      setExpenses((prev) => {
+        const next = [newExpense, ...prev];
+        saveToLocalStorage({
+          version: 1,
+          partners,
+          expenses: next,
+          lastUpdated: new Date().toISOString(),
+        });
+        return next;
+      });
       showToast("Expense added successfully!", "success");
     },
-    [showToast]
+    [partners, showToast]
   );
 
   const updateExpense = useCallback(
     (id: string, updates: Partial<Omit<Expense, "id">>) => {
-      setExpenses((prev) =>
-        prev.map((e) =>
+      setExpenses((prev) => {
+        const next = prev.map((e) =>
           e.id === id
             ? { ...e, ...updates, updatedAt: new Date().toISOString() }
             : e
-        )
-      );
+        );
+        saveToLocalStorage({
+          version: 1,
+          partners,
+          expenses: next,
+          lastUpdated: new Date().toISOString(),
+        });
+        return next;
+      });
       showToast("Expense updated successfully!", "success");
     },
-    [showToast]
+    [partners, showToast]
   );
 
   const deleteExpense = useCallback(
     (id: string) => {
-      setExpenses((prev) => prev.filter((e) => e.id !== id));
+      setExpenses((prev) => {
+        const next = prev.filter((e) => e.id !== id);
+        saveToLocalStorage({
+          version: 1,
+          partners,
+          expenses: next,
+          lastUpdated: new Date().toISOString(),
+        });
+        return next;
+      });
       showToast("Expense removed.", "info");
     },
-    [showToast]
+    [partners, showToast]
   );
 
   const addPartner = useCallback(
     (name: string): { success: boolean; error?: string } => {
       const trimmed = name.trim();
       if (!trimmed) {
-        return { success: false, error: "Partner name cannot be empty" };
+        return { success: false, error: "Member name cannot be empty" };
       }
 
       if (partners.some((p) => p.name.toLowerCase() === trimmed.toLowerCase() && !p.isArchived)) {
-        return { success: false, error: "An active partner with this name already exists" };
+        return { success: false, error: "An active member with this name already exists" };
       }
 
       const colorIndex = partners.length % PARTNER_AVATAR_COLORS.length;
@@ -163,11 +192,21 @@ export function SplitProvider({ children }: { children: React.ReactNode }) {
         createdAt: new Date().toISOString(),
       };
 
-      setPartners((prev) => [...prev, newPartner]);
-      showToast(`Partner "${trimmed}" added!`, "success");
+      const updatedPartners = [...partners, newPartner];
+      setPartners(updatedPartners);
+
+      // Save immediately to localStorage for guaranteed persistence
+      saveToLocalStorage({
+        version: 1,
+        partners: updatedPartners,
+        expenses,
+        lastUpdated: new Date().toISOString(),
+      });
+
+      showToast(`Member "${trimmed}" added!`, "success");
       return { success: true };
     },
-    [partners, showToast]
+    [partners, expenses, showToast]
   );
 
   const renamePartner = useCallback(
@@ -177,53 +216,135 @@ export function SplitProvider({ children }: { children: React.ReactNode }) {
         return { success: false, error: "Name cannot be empty" };
       }
 
-      setPartners((prev) =>
-        prev.map((p) => (p.id === id ? { ...p, name: trimmed } : p))
+      const updatedPartners = partners.map((p) =>
+        p.id === id ? { ...p, name: trimmed } : p
       );
-      showToast("Partner renamed successfully", "success");
+      setPartners(updatedPartners);
+
+      // Save immediately to localStorage
+      saveToLocalStorage({
+        version: 1,
+        partners: updatedPartners,
+        expenses,
+        lastUpdated: new Date().toISOString(),
+      });
+
+      showToast("Member renamed successfully", "success");
       return { success: true };
     },
-    [showToast]
+    [partners, expenses, showToast]
+  );
+
+  const deletePartner = useCallback(
+    (id: string): { success: boolean; error?: string } => {
+      const remainingPartners = partners.filter((p) => p.id !== id);
+      if (remainingPartners.length === 0) {
+        return {
+          success: false,
+          error: "At least one member is required in Split50.",
+        };
+      }
+
+      const fallbackPartnerId = remainingPartners.find((p) => !p.isArchived)?.id || remainingPartners[0].id;
+
+      // Clean up expenses referencing the deleted partner
+      const updatedExpenses = expenses.map((exp) => {
+        const newSplit = exp.splitAmongIds.filter((pId) => pId !== id);
+        const finalSplit = newSplit.length > 0 ? newSplit : [fallbackPartnerId];
+        const newPaidBy = exp.paidById === id ? fallbackPartnerId : exp.paidById;
+        return {
+          ...exp,
+          paidById: newPaidBy,
+          splitAmongIds: finalSplit,
+          updatedAt: new Date().toISOString(),
+        };
+      });
+
+      setPartners(remainingPartners);
+      setExpenses(updatedExpenses);
+
+      // Save immediately to localStorage
+      saveToLocalStorage({
+        version: 1,
+        partners: remainingPartners,
+        expenses: updatedExpenses,
+        lastUpdated: new Date().toISOString(),
+      });
+
+      showToast("Member deleted successfully.", "info");
+      return { success: true };
+    },
+    [partners, expenses, showToast]
   );
 
   const archivePartner = useCallback(
     (id: string): { success: boolean; error?: string } => {
       const active = partners.filter((p) => !p.isArchived);
-      if (active.length <= 2) {
+      if (active.length <= 1) {
         return {
           success: false,
-          error: "Split50 requires at least two active partners. You cannot archive this partner.",
+          error: "At least one active member is required.",
         };
       }
 
-      setPartners((prev) =>
-        prev.map((p) => (p.id === id ? { ...p, isArchived: true } : p))
+      const updatedPartners = partners.map((p) =>
+        p.id === id ? { ...p, isArchived: true } : p
       );
-      showToast("Partner archived. Past records preserved.", "info");
+      setPartners(updatedPartners);
+
+      saveToLocalStorage({
+        version: 1,
+        partners: updatedPartners,
+        expenses,
+        lastUpdated: new Date().toISOString(),
+      });
+
+      showToast("Member archived. Past records preserved.", "info");
       return { success: true };
     },
-    [partners, showToast]
+    [partners, expenses, showToast]
   );
 
   const unarchivePartner = useCallback(
     (id: string): { success: boolean; error?: string } => {
-      setPartners((prev) =>
-        prev.map((p) => (p.id === id ? { ...p, isArchived: false } : p))
+      const updatedPartners = partners.map((p) =>
+        p.id === id ? { ...p, isArchived: false } : p
       );
-      showToast("Partner restored to active list.", "success");
+      setPartners(updatedPartners);
+
+      saveToLocalStorage({
+        version: 1,
+        partners: updatedPartners,
+        expenses,
+        lastUpdated: new Date().toISOString(),
+      });
+
+      showToast("Member restored to active list.", "success");
       return { success: true };
     },
-    [showToast]
+    [partners, expenses, showToast]
   );
 
   const resetExpenses = useCallback(() => {
     setExpenses([]);
+    saveToLocalStorage({
+      version: 1,
+      partners,
+      expenses: [],
+      lastUpdated: new Date().toISOString(),
+    });
     showToast("All expenses have been reset.", "info");
-  }, [showToast]);
+  }, [partners, showToast]);
 
   const resetAll = useCallback(() => {
     setPartners(DEFAULT_PARTNERS);
     setExpenses(DEFAULT_EXPENSES);
+    saveToLocalStorage({
+      version: 1,
+      partners: DEFAULT_PARTNERS,
+      expenses: DEFAULT_EXPENSES,
+      lastUpdated: new Date().toISOString(),
+    });
     showToast("Application reset to default state.", "info");
   }, [showToast]);
 
@@ -231,6 +352,7 @@ export function SplitProvider({ children }: { children: React.ReactNode }) {
     (newState: Split50StorageState) => {
       setPartners(newState.partners);
       setExpenses(newState.expenses);
+      saveToLocalStorage(newState);
       showToast("Backup restored successfully!", "success");
     },
     [showToast]
@@ -248,6 +370,8 @@ export function SplitProvider({ children }: { children: React.ReactNode }) {
         setActiveTab,
         isAddExpenseOpen,
         setIsAddExpenseOpen,
+        isMemberModalOpen,
+        setIsMemberModalOpen,
         editingExpense,
         setEditingExpense,
         addExpense,
@@ -255,6 +379,7 @@ export function SplitProvider({ children }: { children: React.ReactNode }) {
         deleteExpense,
         addPartner,
         renamePartner,
+        deletePartner,
         archivePartner,
         unarchivePartner,
         resetExpenses,

@@ -185,5 +185,103 @@ describe("Storage, Persistence, Backup & WhatsApp Integration Tests", () => {
     expect(emptyPayload.success).toBe(false);
     expect(emptyPayload.error).toContain("Missing or invalid schema version");
   });
+
+  // Scenario 13: Multiple member lifecycle — Add, Edit, Delete and LocalStorage persistence across refresh
+  it("Scenario 13: Supports multiple members with full Add, Edit, Delete and refresh persistence", () => {
+    // 1. Initial state with 3 members
+    const member1: Partner = {
+      id: "m1",
+      name: "Mahesh",
+      isArchived: false,
+      createdAt: "2026-01-01T00:00:00.000Z",
+    };
+    const member2: Partner = {
+      id: "m2",
+      name: "Abadh",
+      isArchived: false,
+      createdAt: "2026-01-01T00:00:00.000Z",
+    };
+    const member3: Partner = {
+      id: "m3",
+      name: "Suresh",
+      isArchived: false,
+      createdAt: "2026-01-01T00:00:00.000Z",
+    };
+
+    const initialData: Split50StorageState = {
+      version: 1,
+      partners: [member1, member2, member3],
+      expenses: [
+        {
+          id: "e-multi-1",
+          title: "Dinner",
+          amountPaise: 300000, // ₹3,000
+          date: "2026-11-12",
+          paidById: member1.id,
+          splitAmongIds: [member1.id, member2.id, member3.id],
+          category: "Food",
+          createdAt: "2026-11-12T00:00:00.000Z",
+          updatedAt: "2026-11-12T00:00:00.000Z",
+        },
+      ],
+      lastUpdated: "2026-11-12T00:00:00.000Z",
+    };
+
+    // Save state to simulated LocalStorage
+    localStorageMock.setItem("split50_data_v1", JSON.stringify(initialData));
+
+    // Simulate page reload by validating stored data
+    const reloaded = JSON.parse(localStorageMock.getItem("split50_data_v1")!);
+    const validation = validateStorageState(reloaded);
+    expect(validation.isValid).toBe(true);
+    expect(validation.state.partners).toHaveLength(3);
+    expect(validation.state.partners.map((p) => p.name)).toEqual(["Mahesh", "Abadh", "Suresh"]);
+
+    // Calculate settlement among 3 members: Mahesh paid ₹3,000, each share is ₹1,000.
+    // Suresh owes ₹1,000, Abadh owes ₹1,000 to Mahesh.
+    const summary = calculateSettlementSummary(validation.state.partners, validation.state.expenses);
+    expect(summary.totalExpenditurePaise).toBe(300000);
+    expect(summary.partnerCount).toBe(3);
+    const maheshMetric = summary.partnerMetrics.find((m) => m.partnerId === "m1");
+    expect(maheshMetric?.netBalancePaise).toBe(200000); // +₹2,000
+
+    // 2. Edit / Rename Member
+    const renamedPartners = validation.state.partners.map((p) =>
+      p.id === "m3" ? { ...p, name: "Suresh Sharma" } : p
+    );
+    const updatedState: Split50StorageState = {
+      ...validation.state,
+      partners: renamedPartners,
+    };
+    localStorageMock.setItem("split50_data_v1", JSON.stringify(updatedState));
+
+    // Verify rename persists after refresh
+    const reloadedAfterRename = JSON.parse(localStorageMock.getItem("split50_data_v1")!);
+    const renameValidation = validateStorageState(reloadedAfterRename);
+    expect(renameValidation.state.partners.find((p) => p.id === "m3")?.name).toBe("Suresh Sharma");
+
+    // 3. Delete Member (Delete Suresh Sharma)
+    const remainingPartners = renameValidation.state.partners.filter((p) => p.id !== "m3");
+    // Clean up expenses
+    const cleanedExpenses = renameValidation.state.expenses.map((exp) => ({
+      ...exp,
+      splitAmongIds: exp.splitAmongIds.filter((id) => id !== "m3"),
+    }));
+
+    const stateAfterDelete: Split50StorageState = {
+      version: 1,
+      partners: remainingPartners,
+      expenses: cleanedExpenses,
+      lastUpdated: new Date().toISOString(),
+    };
+    localStorageMock.setItem("split50_data_v1", JSON.stringify(stateAfterDelete));
+
+    // Verify delete persists after refresh
+    const reloadedAfterDelete = JSON.parse(localStorageMock.getItem("split50_data_v1")!);
+    const deleteValidation = validateStorageState(reloadedAfterDelete);
+    expect(deleteValidation.state.partners).toHaveLength(2);
+    expect(deleteValidation.state.partners.map((p) => p.name)).toEqual(["Mahesh", "Abadh"]);
+    expect(deleteValidation.state.expenses[0].splitAmongIds).toEqual(["m1", "m2"]);
+  });
 });
 

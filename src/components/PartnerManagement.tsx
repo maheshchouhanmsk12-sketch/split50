@@ -10,6 +10,7 @@ import {
   Archive,
   RefreshCw,
   Edit2,
+  Trash2,
   Check,
   X,
   AlertCircle,
@@ -22,6 +23,7 @@ export function PartnerManagement() {
     activePartners,
     addPartner,
     renamePartner,
+    deletePartner,
     archivePartner,
     unarchivePartner,
   } = useSplit();
@@ -30,6 +32,7 @@ export function PartnerManagement() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState("");
   const [archiveTargetId, setArchiveTargetId] = useState<string | null>(null);
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleAdd = (e: React.FormEvent) => {
@@ -172,25 +175,25 @@ export function PartnerManagement() {
                       <button
                         type="button"
                         onClick={() => {
-                          if (activePartners.length <= 2) {
-                            setError("Split50 requires at least two active partners. You cannot archive this member.");
+                          if (partners.length <= 1) {
+                            setError("At least one member is required in Split50.");
                           } else {
-                            setArchiveTargetId(partner.id);
+                            setDeleteTargetId(partner.id);
                           }
                         }}
-                        disabled={activePartners.length <= 2}
+                        disabled={partners.length <= 1}
                         className={`p-1.5 rounded-lg transition-colors ${
-                          activePartners.length <= 2
+                          partners.length <= 1
                             ? "opacity-30 cursor-not-allowed text-[var(--text-muted)]"
                             : "text-[var(--text-muted)] hover:text-rose-500 hover:bg-[var(--bg-subtle)]"
                         }`}
                         title={
-                          activePartners.length <= 2
-                            ? "Minimum 2 active partners required"
-                            : "Archive partner"
+                          partners.length <= 1
+                            ? "At least one member is required"
+                            : "Delete partner"
                         }
                       >
-                        <Archive className="w-3.5 h-3.5" />
+                        <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   )}
@@ -251,6 +254,21 @@ export function PartnerManagement() {
           }
         }}
         onCancel={() => setArchiveTargetId(null)}
+      />
+
+      <ConfirmModal
+        isOpen={Boolean(deleteTargetId)}
+        title="Delete Member"
+        message="Are you sure you want to delete this member? All records will be cleanly recalculated and this member will be permanently removed."
+        confirmLabel="Delete Member"
+        isDestructive={true}
+        onConfirm={() => {
+          if (deleteTargetId) {
+            deletePartner(deleteTargetId);
+            setDeleteTargetId(null);
+          }
+        }}
+        onCancel={() => setDeleteTargetId(null)}
       />
     </>
   );

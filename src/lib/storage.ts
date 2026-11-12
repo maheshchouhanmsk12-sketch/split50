@@ -125,15 +125,8 @@ export function validateStorageState(data: unknown): {
       typeof p.name === "string" &&
       p.name.trim()
     ) {
-      let partnerName = p.name.trim();
+      const partnerName = p.name.trim();
       const partnerId = p.id.trim();
-
-      // Automatically migrate legacy placeholder names to user's partners
-      if (partnerName === "Rahul" || partnerId === "partner-rahul") {
-        partnerName = "Mahesh";
-      } else if (partnerName === "Amit" || partnerId === "partner-amit") {
-        partnerName = "Abadh";
-      }
 
       validatedPartners.push({
         id: partnerId,
@@ -146,7 +139,10 @@ export function validateStorageState(data: unknown): {
     }
   }
 
-  // Ensure minimum 2 active partners exist
+  // Preserve all validated partners. Only fallback to defaults if zero valid partners found.
+  const finalPartners = validatedPartners.length > 0 ? validatedPartners : DEFAULT_PARTNERS;
+
+  // Validate minimum 2 active partners requirement
   const activePartners = validatedPartners.filter((p) => !p.isArchived);
   if (activePartners.length < 2) {
     errors.push("At least two active partners are required");
@@ -188,7 +184,7 @@ export function validateStorageState(data: unknown): {
     isValid,
     state: {
       version: CURRENT_SCHEMA_VERSION,
-      partners: validatedPartners.length >= 2 ? validatedPartners : DEFAULT_PARTNERS,
+      partners: finalPartners,
       expenses: validatedExpenses,
       lastUpdated: new Date().toISOString(),
     },
@@ -207,22 +203,20 @@ export function loadFromLocalStorage(): Split50StorageState {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) {
+      // First time installation: save default state
+      saveToLocalStorage(INITIAL_STORAGE_STATE);
       return INITIAL_STORAGE_STATE;
     }
 
     const parsed = JSON.parse(raw);
-    const { isValid, state } = validateStorageState(parsed);
+    const { state } = validateStorageState(parsed);
 
-    if (!isValid) {
-      console.warn("Storage validation found issues, using sanitized fallback state");
+    // Ensure state is valid and partners exist
+    if (state.partners && state.partners.length > 0) {
+      return state;
     }
 
-    // If existing storage had no recorded expenses, populate default sample expenses
-    if (state.expenses.length === 0) {
-      state.expenses = DEFAULT_EXPENSES;
-    }
-
-    return state;
+    return INITIAL_STORAGE_STATE;
   } catch (err) {
     console.error("Failed to load or parse LocalStorage data:", err);
     return INITIAL_STORAGE_STATE;
